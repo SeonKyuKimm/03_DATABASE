@@ -1,4 +1,5 @@
 SELECT * FROM EMPLOYEE; 
+
 -- SELECT는 '조회' * 모두(컬럼명을) FROM '어디서' EMPLOYEE 임플로이에서.
 
 /* SELECT (DQU 데이터검색어 또는 DML 데이터 조작어) : 데이터 조회
@@ -270,4 +271,136 @@ AND SALARY >= 2700000;
  * 8. OR (논리연산자)
  * 
  * */
+
+
+-------------------------------------------------------------------------------------
+
+/* IN 연산자
+ * 
+ * - 비교하려는 값과 목록에 작성된 값 중
+ * 일치하는것이 있으면 조회하는 연산자다
+ * 
+ * [작성법]
+ * 
+ * WHERE 컬럼명 IN(값1, 값2, 값3 ...)
+ * 
+ * (위와 같은 구문)
+ * WHERE 컬럼명 = 값1
+ * OR    컬럼명 = 값2
+ * OR    컬럼명 = 값3
+ * ...
+ * */
+
+
+-- EMPLOYEE 테이블에서
+-- 부서코드가 D1, D6 D9인 사원의 
+-- 사번 이름 부서코드 조회
+
+SELECT EMP_ID, EMP_NAME, DEPT_CODE
+FROM EMPLOYEE
+WHERE DEPT_CODE IN('D1', 'D6', 'D9');
+
+
+/* 위와 같음
+ * WHERE DEPT_CODE = 'D1'
+ * OR DEPT_CODE = 'D6'
+ * OR DEPT_CODE = 'D9';
+ * 
+ * */
+
+-- NOT IN
+
+-- EMPLOYEE 테이블에서
+-- 부서코드가 D1, D6 D9이 아닌 사원의 
+-- 사번 이름 부서코드 조회
+
+SELECT EMP_ID, EMP_NAME, DEPT_CODE
+FROM EMPLOYEE
+WHERE DEPT_CODE NOT IN('D1','D6','D9') --12 명? NULL 인 2 명이 생략됐었다
+OR DEPT_CODE IS NULL; -- DEPT_CODE 가 D1 D6 D9 가 아니고, NULL의 값도 ~ (NULL 처리 연산자)
+
+
+------------------------------------------------------------------------------------------------
+
+/*NULL 처리 연산자
+ * 
+ * JAVA 에서 NULL : 참조하는 객체가 없음을 의미하는 값
+ * DB 에서   NULL : 컬럼에 값이 없음을 의미하는 값
+ * 
+ * 
+ * 
+ * 1) IS NULL : NULL 인 경우 조회
+ * 2) IS NOT NULL : NULL이 아닌 경우 조회
+ * 
+ * 
+ * 
+ * */
+
+-- EMPLOYEE TABLE에서 보너스가 있는 사원의 이름, 보너스를 조회
+SELECT EMP_NAME, BONUS
+FROM EMPLOYEE
+WHERE BONUS IS NOT NULL; -- 9행
+
+-- EMPLOYEE TABLE에서 보너스가 없는 사원의 이름, 보너스를 조회
+
+SELECT EMP_NAME, BONUS
+FROM EMPLOYEE
+WHERE BONUS IS NULL; -- 14행
+
+
+---------------------------------------------------------------
+
+
+/* ORDER BY 절
+ * 
+ * - SELECT 문의 조회 결과 (RESULT SET)를 정렬할 때 사용하는 구문
+ * 
+ * ** SELECT문 해석 시 가장 마지막에 해석됩니다 !
+ * 
+ * 3 SELECT 절
+ * 1 FROM 절
+ * 2 WHERE 절
+ * 4 ORDER BY 컬럼명 || 별칭 || 컬럼 순서 [ ASC  | DESC ]     [NULLS FIRST | LAST]
+ * 															(오름차순: 기본값) (내림차순)
+ * */
+
+-- EMPLOYEE TABLE에서 급여 오름차순으로 
+-- 사번 이름 급여 조회
+SELECT EMP_ID, EMP_NAME, SALARY
+FROM EMPLOYEE
+ORDER BY SALARY ASC; -- ASC가 기본값이라 써도 되고 안써도되고
+
+
+-- 급여 200만 이상인 사원의 
+-- 사번 이름 급여 조회, 단 급여 '내림차순'으로 조회할것.
+
+SELECT EMP_ID,EMP_NAME, SALARY
+FROM EMPLOYEE
+WHERE SALARY >= 2000000
+ORDER BY 3 DESC; -- SELECT 절에 써둔 순서의 번호임.
+
+
+-- 입사일 순서대로 이름 입사일 조회 ( 별칭사용하기 )
+
+SELECT EMP_NAME 이름, HIRE_DATE 입사일
+FROM EMPLOYEE
+ORDER BY 입사일;
+
+/* 정렬 중첩 : 대분류 정렬 후 소분류 정렬*/
+
+-- 부서코드 오름차순 정렬 후 급여 내림차순 정렬
+
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+ORDER BY DEPT_CODE, SALARY DESC;
+
+
+
+
+
+
+
+
+
+
 
