@@ -1,5 +1,8 @@
 SELECT * FROM EMPLOYEE; 
 
+SELECT EMP_NAME
+FROM EMPLOYEE;
+
 -- SELECT는 '조회' * 모두(컬럼명을) FROM '어디서' EMPLOYEE 임플로이에서.
 
 /* SELECT (DQU 데이터검색어 또는 DML 데이터 조작어) : 데이터 조회
@@ -16,8 +19,9 @@ SELECT * FROM EMPLOYEE;
 -- SELECT 컬럼명 FROM 테이블명;
 --> 어떤 테이블의 특정 컬럼을 조회하겠다
 
-SELECT * FROM EMPLOYEE; 
+SELECT * FROM EMPLOYEE;
 -- '*' : ALL, 모든, 모두..
+
 
 SELECT EMP_ID, EMP_NAME, PHONE FROM EMPLOYEE;
 
@@ -32,7 +36,7 @@ SELECT EMP_ID, EMP_NAME, PHONE FROM EMPLOYEE;
 SELECT EMP_ID, EMP_NAME, SALARY, SALARY * 12 FROM EMPLOYEE;
 
 
-SELECT EMP_NAME +10 FROM EMPLOYEE;
+--SELECT EMP_NAME +10 FROM EMPLOYEE;
 -- ORA-01722 : 수치가 부적합합니다.
 -- 산술 연산은 숫자(NUMBER타입)만 가능합니다!
 
@@ -147,6 +151,7 @@ SELECT EMP_ID, EMP_NAME, SALARY, PHONE
 FROM EMPLOYEE
 WHERE SALARY >= 3000000 AND SALARY < 5000000;
 
+
 -----------------------------------------------------------------------------
 
 -- BETWEEN A AND B : A 이상 B 이하
@@ -176,7 +181,7 @@ WHERE HIRE_DATE BETWEEN '1990-01-01' AND '1999-12-31';
 -- EX) 1 = '1'
 SELECT '같음'
 FROM DUAL
-WHERE 1 = '1';
+WHERE 1 = '';
 
 ----------------------------------------------------------------------------------------------
 
