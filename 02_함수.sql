@@ -396,7 +396,7 @@ SELECT MIN(SALARY), MIN(HIRE_DATE), MIN(EMAIL)
 FROM EMPLOYEE;
 
 
--- 급여 최EO값, 가장 늦은 입사일, 알파벳 순서가 가장 늦는 이메일을 조회
+-- 급여 최대값, 가장 늦은 입사일, 알파벳 순서가 가장 늦는 이메일을 조회
 
 SELECT MAX(SALARY), MAX(HIRE_DATE), MAX(EMAIL)
 FROM EMPLOYEE;

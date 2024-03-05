@@ -1,6 +1,6 @@
 
 /* 
-[JOIN 용어 정리]───────────────┬────────────────────────────────────────────────────────────────────────────────┐
+[ JOIN 용어 정리 ]─────────────┬────────────────────────────────────────────────────────────────────────────────┐
 │  오라클       	  	         │                       SQL : 1999표준(ANSI)                                     │
 ├──────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┫
 │등가 조인		                 │               내부 조인(INNER JOIN), JOIN USING / ON                           │
@@ -14,6 +14,7 @@
 │카테시안(카티션) 곱		       │     	            	  	 교차 조인(CROSS JOIN)                                  │
 │CARTESIAN PRODUCT			       │                                                                                │
 └──────────────────────────────┴────────────────────────────────────────────────────────────────────────────────┘
+
 - 미국 국립 표준 협회(American National Standards Institute, ANSI) 미국의 산업 표준을 제정하는 민간단체.
 - 국제표준화기구 ISO에 가입되어 있음.
 */
@@ -52,7 +53,7 @@ FROM EMPLOYEE
 JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID);
 
 
---  1 . 내부 조인 (INNER JOIN) ( == 등가 조인(EQUAL JOIN) ) 
+-- 1 . 내부 조인 (INNER JOIN) ( == 등가 조인 ( EQUAL JOIN ) ) 
 --> 연결되는 컬럼의 값이 일치하는 행들만 조인됨.
 --> ( == 일치하는 값이 없는 행은 조인에서 제외됨.)
 
@@ -180,7 +181,7 @@ ON( DEPT_CODE = DEPT_ID ); --23개 행 (하동운, 이오리 포함임)
 SELECT EMP_NAME, DEPT_TITLE
 FROM EMPLOYEE, DEPARTMENT
 WHERE DEPT_CODE = DEPT_ID(+);
--- 반대쪽 테이블 컬럼에 (+) 기호를 작성해야한다;;
+-- 반대쪽 테이블의 컬럼에 (+) 기호를 작성해야한다;;
 
 
 
@@ -217,9 +218,149 @@ WHERE DEPT_CODE(+) = DEPT_ID(+);
 -- ORA-01468: outer-join된 테이블은 1개만 지정할 수 있습니다
 
 
+---------------------------------------------------------------------------------------------------------
+
+-- 3 . 교차 JOIN ( CROSS JOIN == CARTESIAN PRODUCT )
+-- 조인되는 테이블의 각 행들이 모두 매핑된 데이터가 검색되는 방법 (곱집합)
+/*
+ JOIN 구문을 잘못 작성하는 경우 CROSS JOIN의 결과가 조회됨..
+ 
+ */
+
+SELECT EMP_NAME, DEPT_TITLE
+FROM EMPLOYEE 
+CROSS JOIN DEPARTMENT; -- 207행 == (EMPLOYEE )23행 * (DEPARTMENT) 9행 = 207행
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+-- 4 . 비등가 JOIN ( NON EQUAL JOIN )
+
+-- '=' (등호)를 사용하지 않는 JOIN문이다.
+-- 지정한 컬럼값이 일치하는 경우가 아니고, 값의 범위에 포함되는 행들을 연결하는 방식
+
+SELECT * FROM SAL_GRADE;
+
+SELECT EMP_NAME, SAL_LEVEL FROM EMPLOYEE;
+
+-- 사원의 급여에 따른 급여 등급 파악하기
+
+SELECT EMP_NAME, SALARY , SAL_GRADE.SAL_LEVEL
+FROM EMPLOYEE
+JOIN SAL_GRADE  ON( SALARY BETWEEN MIN_SAL AND MAX_SAL);
+
+---------------------------------------------------------------------------------------------------------
+
+
+-- 5. 자체 JOIN ( SELF JOIN )
+
+/* 같은 테이블을 JOIN.
+
+ 자기 자신과 JOIN.
+ TIP ! 같은 테이블 2개가 있다고 생각하고 JOIN 진행!
+
+*/
+
+-- 사번, 이름, 사수의 사번, 사수 이름 조회
+
+-- ANSI 표준
+SELECT E1.EMP_ID, E1.EMP_NAME,
+	NVL(E1.MANAGER_ID, '없음'), 
+	NVL(E2.EMP_NAME, '-')
+FROM EMPLOYEE E1
+LEFT JOIN EMPLOYEE E2 ON(E1.MANAGER_ID = E2.EMP_ID);
+-- 테이블에 별칭을 달아줘서 구분할 수 있게 했다
+-- 사수가 없는 NULL 도 JOIN을 해야해서 LEFT JOIN도 해줬다.. 
+
+
+-- ORACLE 구문 
+SELECT E1.EMP_ID, E1.EMP_NAME,
+	NVL(E1.MANAGER_ID, '없음'), 
+	NVL(E2.EMP_NAME, '-')
+FROM EMPLOYEE E1, EMPLOYEE E2
+WHERE E1.MANAGER_ID = E2.EMP_ID(+);
+
+
+---------------------------------------------------------------------------------------------------------
+
+-- 6 . 자연 조인 ( NATURAL JOIN )
+/*
+	동일한 타입과 이름을 가진 컬럼이 있는 테이블 간의
+  조인을 간단히 표현하는 방법
+   
+   ** 반드시 두 테이블 간의 동일한 컬럼명, 타입을 가진 컬럼이 필요
+      -> 없을 경우 교차조인 (CROSS JOIN)된다.
+*/
+
+SELECT EMP_NAME, JOB_NAME
+FROM EMPLOYEE
+-- JOIN JOB USING(JOB_CODE);
+NATURAL JOIN JOB;
+-- 컬럼명 쓸 필요도 없이 알아서 탐색함 ㅎ , 각각의 테이블에 대한 정보가 뚜렷할 때 사용하면 좋다.
+
+
+SELECT EMP_NAME, DEPT_TITLE
+FROM EMPLOYEE
+NATURAL JOIN DEPARTMENT;
+-- JOIN이 잘못된 케이스. 같은 컬럼명을 가진 애가 없어서.. ( CROSS JOIN의 결과가 조회됐음)
+
+
+-----------------------------------------------------------------------------------------------------------
+
+
+-- 7 . 다중 조인 
+/*
+ 
+  N 개의 테이블을 조회할 때 사용 ( 순서 중요! ! ! )
+   
+ */
+
+-- 사원 이름, 부서명, 지역명 조회
+--> EMPLOYEE, DEPARTMENT, LOCATION (테이블이 무려 3개 !, 접점이 있는 테이블 묶음 + 끌어올 애 )
+
+-- ANSI 표준
+SELECT EMP_NAME, DEPT_TITLE, LOCAL_NAME
+FROM EMPLOYEE
+JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+JOIN LOCATION ON(LOCATION_ID = LOCAL_CODE);
+-- CTRL + SHIFT + 방향키 : 위아래 줄바꿈
+-- CTRL + ALT + 방향키 : 위아래 줄 복사 
+
+
+-- ORACLE 전용
+SELECT EMP_NAME, DEPT_TITLE, LOCAL_NAME
+FROM EMPLOYEE, DEPARTMENT, LOCATION
+WHERE DEPT_CODE = DEPT_ID -- EMPLOYEE + DEPARTMENT 가 JOIN된 구문
+AND LOCATION_ID = LOCAL_CODE; --(EMPLOYEE + DEPARTMENT) + LOCATION 이 JOIN된 구문
+
+-- JOIN할 순서를 지키지 않은 경우 ( 에러 발생 ) 
+
+-- PTSD 타임! 
+-- [다중 조인 연습 문제]
+
+--직급이 대리이면서 아시아 지역에 근무하는 직원조회
+-- 사번 이름 직급명 부서명 근무지역명 급여를 조회
+
+-- ANSI 표준
+SELECT EMP_ID, EMP_NAME, JOB_NAME, DEPT_TITLE, LOCAL_NAME, SALARY
+FROM EMPLOYEE
+JOIN JOB USING( JOB_CODE )
+JOIN DEPARTMENT ON ( DEPT_CODE = DEPT_ID )
+JOIN LOCATION ON(LOCATION_ID = LOCAL_CODE )
+WHERE JOB_NAME = '대리'
+AND LOCAL_NAME LIKE 'ASIA%';
 
 
 
+-- ORACLE
+SELECT EMP_ID, EMP_NAME, JOB_NAME, DEPT_TITLE, LOCAL_NAME, SALARY
+FROM EMPLOYEE E, JOB J, DEPARTMENT , LOCATION
+WHERE E.JOB_CODE = J.JOB_CODE
+AND DEPT_CODE = DEPT_ID
+AND LOCATION_ID = LOCAL_CODE
+AND JOB_NAME = '대리'
+AND LOCAL_NAME LIKE 'ASIA%';
 
 
 
