@@ -123,14 +123,14 @@ SELECT TRUNC(123.456) FROM DUAL; --123, 위치 지정 X, 소수점 아래 버림
 
 SELECT TRUNC(123.456, 1) FROM DUAL; -- 123.4 소수점 첫째 자리 아래 버림
 
-SELECT TRUNC(123.456, -1) FROM DUAL; --10의 자리 아래 버림 
+SELECT TRUNC(123.456, -) FROM DUAL; --10의 자리 아래 버림 
 
 
 /* 내림, 버림 의 차이점*/
 
 SELECT FLOOR(-123.5), TRUNC(-123.5) FROM DUAL; 
 --					 -124					  -123
-
+SELECT FLOOR(123.8) FROM DUAL;
 ----------------------------------------------------------------------------
 
 /* 날짜(DATE) 관련된 함수  */
@@ -167,9 +167,9 @@ SELECT LAST_DAY('2020-12-25') FROM DUAL;
 
 
 
---EXTRACT : 년 월 일 정보를 추출하여 리턴
---EXTRACT(YEAR FROM 날짜) : 년도만 추출
---EXTRACT(MONTH FROM 날짜) : 월만 추출
+-- EXTRACT : 년 월 일 정보를 추출하여 리턴
+-- EXTRACT(YEAR FROM 날짜) : 년도만 추출
+-- EXTRACT(MONTH FROM 날짜) : 월만 추출
 -- EXTRACT(DAY FROM 날짜) : 일만 추출
 
 -- EMPLOYEE 테이블에서
