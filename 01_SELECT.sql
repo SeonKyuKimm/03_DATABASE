@@ -123,6 +123,7 @@ SELECT EMP_ID, EMP_NAME, SALARY, DEPT_CODE
 FROM EMPLOYEE
 WHERE SALARY > 3000000;
 
+
 -- EMPLOYEE 테이블에서 부서코드가 'D9'인 사원의
 -- 사번, 이름, 부서코드, 직급코드 조회
 
@@ -131,6 +132,7 @@ FROM EMPLOYEE
 WHERE DEPT_CODE = 'D9'; --비교연산자가 ( = ) / 대입연산자 ( := )
 
 -- 비교연산자 : >, <, >=, <=, =(같다), ( !=, <> 같지 않다 )
+
 
 
 ---------------------------------------------------------------------------
@@ -221,6 +223,7 @@ FROM EMPLOYEE
 WHERE PHONE LIKE '010%';
 -- WHERE PHONE LINE '010_________';
 
+ 
 -- EMPLOYEE 테이블에서 전화번호가 010 으로 시작하지 않는'%' 사원의
 -- 사번 이름 전화번호 조회
 
@@ -244,6 +247,11 @@ WHERE EMAIL LIKE '____%';
 SELECT EMP_NAME, EMAIL
 FROM EMPLOYEE
 WHERE EMAIL LIKE '___+_%' ESCAPE '+';
+
+SELECT SALARY
+FROM EMPLOYEE
+WHERE HIRE_DATE LIKE '1990-0%';
+
 --> + 뒤에 작성된 _ 는 일반 문자로 탈출시킨다. (+ 가 아닌 다른 기호도 ㄱㅊ, 대신 ESCAPE '특수기호' 첨부)
 
 
