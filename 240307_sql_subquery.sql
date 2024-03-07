@@ -59,19 +59,104 @@ SELECT DEPT_CODE, JOB_CODE
 FROM EMPLOYEE
 WHERE EXTRACT(YEAR FROM HIRE_DATE) = 2000;
 
+-- 5 . ─────────────────────────────────────────────────────────────────────────────────────────────
+
+-- 메인쿼리 (사번, 이름, 부서코드, 사수번호, 주민번호, 고용일)
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, MANAGER_ID, EMP_NO, TO_CHAR(HIRE_DATE, 'YY/MM/DD')
+FROM EMPLOYEE
+LEFT JOIN DEPARTMENT ON DEPT_ID = DEPT_CODE
+WHERE (DEPT_TITLE, MANAGER_ID) IN (SELECT DEPT_TITLE ,MANAGER_ID 
+															  	FROM EMPLOYEE
+																	NATURAL JOIN DEPARTMENT
+																	WHERE SUBSTR(EMP_NO, 8, 1 ) = '2'
+																	AND SUBSTR(EMP_NO, 1, 2) = '77')
+ORDER BY EMP_ID;
+																	
+	/*			이건 왜 틀렸을까 ?												
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, MANAGER_ID, EMP_NO, TO_CHAR(HIRE_DATE, 'YY/MM/DD')
+FROM EMPLOYEE
+LEFT JOIN DEPARTMENT ON DEPT_ID = DEPT_CODE
+WHERE (DEPT_TITLE, MANAGER_ID) IN (SELECT DEPT_TITLE, MANAGER_ID
+   																 FROM EMPLOYEE E
+																   JOIN DEPARTMENT D ON E.DEPT_ID = D.DEPT_CODE 
+																   WHERE SUBSTR(EMP_NO, 8, 1) = '2'
+																   AND SUBSTR(EMP_NO, 1, 2) = '77'
+																	 );*/
+
+--''77년생 여자 사원''과 '동일한 부서''이면서 ''동일한 사수''를 가지고 있는 사원을 조회하시오
+SELECT DEPT_TITLE ,MANAGER_ID 
+FROM EMPLOYEE
+NATURAL JOIN DEPARTMENT
+WHERE SUBSTR(EMP_NO, 8, 1 ) = '2'
+AND SUBSTR(EMP_NO, 1,2)= '77';
+--AND EXTRACT(YEAR FROM EMP_NO)= '77____-';
+--DECODE( SUBSTR(EMP_NO, 8, 1), '1', '남성', '2', '여성')
+
+
 
 -- 6 . ─────────────────────────────────────────────────────────────────────────────────────────────
 
 -- 사번, 이름, 부서명(NULL이면 '소속없음'), 직급명, 입사일을 조회하고 (입사일 빠른 순, MAIN)
 
+
+
+
+SELECT EMP_ID, EMP_NAME, NVL(DEPT_TITLE,'소속없음'), JOB_NAME, TO_CHAR(HIRE_DATE, 'YY/MM/DD')
+FROM EMPLOYEE MAIN
+JOIN JOB USING(JOB_CODE)
+LEFT JOIN DEPARTMENT ON (DEPT_ID = DEPT_CODE)
+
+WHERE HIRE_DATE IN (SELECT MIN(HIRE_DATE)
+									FROM EMPLOYEE SUB
+									WHERE ENT_YN != 'Y'
+									AND MAIN.DEPT_CODE = SUB.DEPT_CODE
+									OR (MAIN.DEPT_CODE IS NULL AND SUB.DEPT_CODE IS NULL)
+									)
+								
+ORDER BY HIRE_DATE;
+
 -- '부서별 입사일이 가장 빠른' 사원
 
 
-
-SELECT EMP_ID, EMP_NAME, NVL(DEPT_TITLE,'소속없음'), JOB_NAME, HIRE_DATE
+SELECT MIN(HIRE_DATE)
 FROM EMPLOYEE
-NATURAL JOIN JOB
-LEFT JOIN DEPARTMENT ON (DEPT_ID, DEPT_CODE);
+WHERE DEPT_CODE;
+
+-- 7 . ─────────────────────────────────────────────────────────────────────────────────────────────
+-- '직급별' '나이가 가장 어린 직원'의
+-- 사번, 이름, 직급명, 나이, 보너스 포함 연봉을 조회하고
+-- 나이순으로 내림차순 정렬하세요 
+-- 단 연봉은 ￦124,800,000 으로 출력되게 하세요. (￦ : 원 단위 기호)
+
+
+
+
+SELECT EMP_ID,EMP_NAME,JOB_NAME,나이,보너스포함연봉
+FROM (SELECT EMP_ID,EMP_NAME,JOB_NAME,
+				TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), 
+				(19 || SUBSTR(EMP_NO,1,6))) /12) 나이,
+				'￦'||(SALARY * (NVL(BONUS,0) + 1)) *12 보너스포함연봉
+			FROM EMPLOYEE
+			NATURAL JOIN JOB)
+			WHERE 나이 IN (SELECT MIN(TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), 
+										(19 || SUBSTR(EMP_NO,1,6))) /12))
+                 FROM EMPLOYEE
+             	   GROUP BY JOB_CODE)
+               
+ORDER BY 나이 DESC;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
