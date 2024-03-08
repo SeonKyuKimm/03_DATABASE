@@ -263,7 +263,7 @@ SELECT TO_DATE('240229 123350', 'YYMMDD HHMISS') FROM DUAL;
 -- EMPLOYEE 테이블에서 각 직원이 태어난 생년월일(1990년 05월 13일) 조회
 SELECT EMP_NAME, 
 			 TO_CHAR(TO_DATE(SUBSTR(EMP_NO , 1, INSTR(EMP_NO, '-') -1 ) , 'RRMMDD' ),
-				'YYYY "년" MM "월" DD "일" ') 
+			 'YYYY "년" MM "월" DD "일" ') 
 FROM EMPLOYEE;
 
 
