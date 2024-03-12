@@ -62,7 +62,7 @@ SELECT SYSDATE FROM DUAL;
 
 -- 날짜 + 산술 연산(+ ,-)
 
-SELECT SYSDATE -1, SYSDATE, SYSDATE +1 
+SELECT SYSDATE -1, SYSDATE, SYSDATE + 1 
 FROM DUAL;
 
 -- 날짜에 +, -  연산 시 일 단위로 계산이 진행된다
@@ -256,12 +256,12 @@ WHERE HIRE_DATE LIKE '1990-0%';
 
 
 -- 연습문제
--- EMPLOYEE 테이블에서
--- 이메일'_' 앞이 4글자이면서
--- 부서코드가 'D9' 또는 'D6'이고 -> AND가 OR 보다 우선순위가 높다, () 사용 가능
--- 입사일이 1990-01-01 ~2000-12-31 이고
--- 급여가 270만 이상인 사원의
--- 사번 이름 이메일 부서코드 입사일 급여 조회
+-- EMPLOYEE 테이블에서 -- FROM 절
+-- 이메일'_' 앞이 4글자이면서 -- 조건
+-- 부서코드가 'D9' 또는 'D6'이고 -> AND가 OR 보다 우선순위가 높다, () 사용 가능 -- 조건절에 들어가야 할 문장
+-- 입사일이 1990-01-01 ~2000-12-31 이고 --AND 로 표현해주어야 할 또 하나의 조건
+-- 급여가 270만 이상인 사원의 -- AND 로 표현해주어야 할 또 하나의 조건
+-- 사번 이름 이메일 부서코드 입사일 급여 조회 -- SELECT절로 구분해야할 문장
 
 SELECT EMP_NO, EMP_NAME, EMAIL, DEPT_CODE, HIRE_DATE, SALARY
 FROM EMPLOYEE
@@ -270,6 +270,12 @@ AND (DEPT_CODE = 'D9' OR DEPT_CODE = 'D6')
 AND HIRE_DATE BETWEEN '1990-01-01' AND '2000-12-31'
 AND SALARY >= 2700000;
 
+SELECT EMP_NO, EMP_NAME, EMAIL, DEPT_CODE, HIRE_DATE, SALARY
+FROM EMPLOYEE
+WHERE EMAIL LIKE '____+_%' ESCAPE '+'
+AND (DEPT_CODE = 'D6' OR DEPT_CODE ='D9') 
+AND HIRE_DATE BETWEEN '1990-01-01' AND'2000-12-31' 
+AND SALARY >= 2700000;
 -- 연산자 우선순위
 
 /*
@@ -322,6 +328,9 @@ WHERE DEPT_CODE IN('D1', 'D6', 'D9');
  * */
 
 -- NOT IN
+SELECT EMP_ID, EMP_NAME, DEPT_CODE 
+FROM EMPLOYEE
+WHERE DEPT_CODE NOT IN 'D1';
 
 -- EMPLOYEE 테이블에서
 -- 부서코드가 D1, D6 D9이 아닌 사원의 
