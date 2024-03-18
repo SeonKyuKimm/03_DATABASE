@@ -11,12 +11,12 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 -- CTRL + S : 자바와 같이 현재 수행 저장
 
 -- 사용자 계정 생성
-CREATE USER exam_ksk IDENTIFIED BY exam_ksk;
+CREATE USER board_project IDENTIFIED BY board1234;
 
 
 -- 사용자 계정에 권한 부여
-GRANT RESOURCE, CONNECT TO exam_ksk;
+GRANT RESOURCE, CONNECT TO board_project;
 
 
 --객체가 생성될 수 있는 공간 할당량 지정
-ALTER USER exam_ksk DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
+ALTER USER board_project DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
