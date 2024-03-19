@@ -812,3 +812,19 @@ FROM EMPLOYEE;
 -- 20 박나라 1800000
 
 
+--------------------------------------------------------------------------------------------
+
+
+--DEPT_CODE가 D9이거나 D6이고 SALARY이 300만원 이상이고 BONUS가 있고
+
+--남자이고 이메일주소가 _ 앞에 3글자 있는
+
+--사원의 EMP_NAME, EMP_NO, DEPT_CODE, SALARY를 조회
+
+SELECT EMP_NAME, EMP_NO, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D9' OR DEPT_CODE =  'D6' 
+AND SALARY >= 3000000
+AND SUBSTR(EMP_NO, 8, 1) = '1'
+AND EMAIL LIKE '___+_%' ESCAPE '+'
+AND BONUS IS NOT NULL;
