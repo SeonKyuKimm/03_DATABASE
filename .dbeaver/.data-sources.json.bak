@@ -109,6 +109,48 @@
 		"oracle_thin-18e50ead0a9-24942697915761c4": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
+			"name": "board_project",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "xe",
+				"url": "jdbc:oracle:thin:@//localhost:1521/xe",
+				"configurationType": "MANUAL",
+				"home": "C:\\Tools\\dbhomeXE",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"oracle_thin-18e7a5a2e01-76ed5a2c39cb4a8e": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "todo_servlet",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "xe",
+				"url": "jdbc:oracle:thin:@//localhost:1521/xe",
+				"configurationType": "MANUAL",
+				"home": "C:\\Tools\\dbhomeXE",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"oracle_thin-18e800d6772-71e08566d5d72a6c": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
 			"name": "localhost 2",
 			"save-password": true,
 			"configuration": {
